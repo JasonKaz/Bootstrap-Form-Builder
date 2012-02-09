@@ -1,177 +1,306 @@
 <?php
-/**
- * Created by Jason Kaczmarsky
- * Date: 9/30/11 @ 12:58 AM
-*/
+class FormUtils {
+    protected function parseAttribs($Attribs){
+        $Code='';
 
-class Form  {
-    private $Method, $Action, $Attribs, $Code, $Multipart=false, $Stacked=false,
-        $InputPrepend='<div class="clearfix">',
-        $InputAppend='</div>';
-
-    function init($Method, $Action, $Attribs=array()){
-        return $this->_init($Method, $Action, $Attribs);
-    }
-
-    function init_multipart($Method, $Action, $Attribs=array()){
-        return $this->_init($Method, $Action, $Attribs,true);
-    }
-
-    private function _init($Method, $Action, $Attribs=array(),$Multipart=false){
-        $this->Method=strtolower($Method);
-        $this->Action=$Action;
-        $this->Attribs=$Attribs;
-        $this->Multipart=$Multipart;
-        return $this;
-    }
-
-    function setStacked($Value){
-        $this->Stacked=$Value;
-        return $this;
-    }
-
-    function setInputPrepend($Value){
-        $this->InputPrepend=$Value;
-        return $this;
-    }
-
-    function setInputAppend($Value){
-        $this->InputAppend=$Value;
-        return $this;
-    }
-
-    function render(){
-        $Return='<form action="'.$this->Action.'" method="'.$this->Method.'"';
-
-        if ($this->Multipart)
-            $Return.=' enctype="multipart/form-data"';
-
-        if ($this->Stacked && !isset($this->Attribs['class']))
-            $Return.=' class="form-stacked"';
-
-        foreach($this->Attribs as $key=>$value){
-            if ($this->Stacked && $key=='class')
-                $Return.=' class="form-stacked '.$value.'"';
-            else
-                $Return.=' '.$key.'="'.$value.'"';
-        }
-
-        $Return.='>
-'.$this->Code.'
-</form>';
-
-        return $Return;
-    }
-
-    private function rowStart(){
-        return $this->InputPrepend;
-    }
-
-    private function rowEnd(){
-        return $this->InputAppend;
-    }
-
-    private function input($Type, $Label, $Attribs=array()){
-        $Return=$this->rowStart();
-
-        if ($Label)
-            $Return.=$this->getLabel($Label,$Attribs);
-
-        $Return.='<div class="input">
-    <input type="'.$Type.'"';
-
-        $Return.=$this->getAttribs($Attribs);
-
-        $Return.=' />
-    </div>'.$this->rowEnd()."\n";
-
-        return $Return;
-    }
-
-    function text($Label, $Attribs=array()){
-        $this->Code.=$this->input('text', $Label, $Attribs);
-
-        return $this;
-    }
-
-    function password($Label, $Attribs=array()){
-        $this->Code.=$this->input('password',$Label,$Attribs);
-
-        return $this;
-    }
-
-    function submit($Attribs=array('class'=>'btn','value'=>'Submit')){
-        $this->Code.=$this->input('submit','',$Attribs);
-
-        return $this;
-    }
-
-    function select($Label, $Attribs=array(), $Values=array(), $SelectedValue=null){
-        $this->Code.=$this->rowStart().$this->getLabel($Label,$Attribs);
-        $this->Code.='<div class="input"><select'.$this->getAttribs($Attribs).'>';
-        foreach($Values as $key=>$value){
-            $this->Code.='<option value="'.$key.'"';
-            if ($key==$SelectedValue)
-                $this->Code.=' selected';
-            $this->Code.='>'.$value.'</option>';
-        }
-        $this->Code.='</select></div>';
-        $this->Code.=$this->rowEnd();
-
-        return $this;
-    }
-
-    function checkbox($Label, $Attribs=array(), $Checked=false){
-        if ($Checked)
-            $Attribs['checked']='checked';
-        $this->Code.=$this->input('checkbox',$Label,$Attribs);
-        return $this;
-    }
-
-    function radio($Label, $Attribs=array()){
-        $this->Code.=$this->input('radio',$Label,$Attribs);
-        return $this;
-    }
-
-    function button($Label='Button', $Attribs=array('class'=>'btn')){
-        $this->Code.=$this->rowStart().'<div class="input"><button'.$this->getAttribs($Attribs).'>'.$Label.'</button></div>'.$this->rowEnd ();
-        return $this;
-    }
-
-    private function getAttribs($Attribs=array()){
-        $Return='';
-        foreach($Attribs as $key=>$value){
-            switch($key){
-                case 'required':
-                    if ($value==true)
-                        $Return.=' required="required"';
+        foreach($Attribs as $key=>$val){
+            switch ($key){
+                case 'checked':
+                    if ($val)
+                        $Code.=' checked="checked"';
                     break;
 
                 case 'autocomplete':
-                    if ($value==false || $value==='off')
-                        $Return.=' autocomplete="off"';
+                    if (!$val)
+                        $Code.=' autocomplete="off"';
                     break;
+
+                case 'required':
+                    if ($val)
+                        $Code.=' required="required"';
 
                 default:
-                    $Return.=' '.$key.'="'.$value.'"';
-                    break;
+                    $Code.=' '.$key.'="'.$val.'"';
             }
         }
-        return $Return;
+
+        return $Code;
     }
 
-    private function getLabel($Label, $Attribs=array()){
-        $Return='<label';
+    protected function getPend1($Attribs){
+        if (isset($Attribs['prepend']))
+            return '<div class="input-prepend"><span class="add-on">'.$Attribs['prepend'].'</span>';
 
-        if (isset($Attribs['id']))
-            $Return.=' for="'.$Attribs['id'].'"';
+        if (isset($Attribs['append']))
+            return '<div class="input-append">';
+    }
 
-        $Return.='>'.$Label.'</label>';
-        return $Return;
+    protected function getPend2($Attribs){
+        if (isset($Attribs['append']))
+            return '<span class="add-on">'.$Attribs['append'].'</span></div>';
+
+        if (isset($Attribs['prepend']))
+            return '</div>';
+    }
+
+    protected function getHelpText($HelpText){
+        if ($HelpText)
+            return '<p class="help-block">'.$HelpText.'</p>';
     }
 }
 
-class AjaxForm  {
+class Form extends FormUtils {
+    private $Code='', $UseHead=false;
 
+    public function init($Action='#', $Method='POST', $Attribs=array()){
+        $this->Code.='<form action="'.$Action.'" method="'.strtoupper($Method).'"';
+        $this->Code.=parent::parseAttribs($Attribs);
+        $this->Code.='>';
+
+        return $this;
+    }
+
+    public function head($Title){
+        $this->UseHead=true;
+
+        $this->Code.='<fieldset><legend>'.$Title.'</legend>';
+
+        return $this;
+    }
+
+    public function group($Label=''){
+        $this->Code.='<div class="control-group">';
+        $Inputs=func_get_args();
+        $Size=count($Inputs)-1;
+
+        if ($Label)
+            $this->Code.='<label class="control-label">'.$Label.'</label>';
+        $this->Code.='<div class="controls';
+
+        if ($Size>2)
+            $this->Code.=' grouping';
+
+        $this->Code.='">';
+
+        for($i=1; $i<$Size+1; $i++)
+            $this->Code.=$Inputs[$i]->render();
+
+        $this->Code.='</div></div>';
+
+        return $this;
+    }
+
+    public function actions(){
+        $this->Code.='<div class="form-actions">';
+
+        $Inputs=func_get_args();
+        for($i=0, $Size=count($Inputs); $i<$Size; $i++){
+            $this->Code.=$Inputs[$i]->render();
+        }
+
+        $this->Code.='</div>';
+
+        return $this;
+    }
+
+    public function render(){
+        if ($this->UseHead)
+            $this->Code.='</fieldset>';
+        $this->Code.='</form>';
+
+        echo $this->Code;
+    }
+}
+
+class Text extends FormUtils  {
+    private $Code='';
+
+    public function __construct($Attribs=array()){
+        $this->Code.=parent::getPend1($Attribs);
+        $this->Code.='<input type="text"'.parent::parseAttribs($Attribs).' />';
+        $this->Code.=parent::getPend2($Attribs);
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class Password extends FormUtils    {
+    private $Code='';
+
+    public function __construct($Attribs=array()){
+        $this->Code.=parent::getPend1($Attribs);
+        $this->Code.='<input type="password"'.parent::parseAttribs($Attribs).' />';
+        $this->Code.=parent::getPend2($Attribs);
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class Checkbox extends FormUtils    {
+    private $Code='';
+
+    public function __construct($Label='', $Attribs=array(), $Inline=false){
+        $this->Code.='<label class="checkbox';
+        if ($Inline)
+            $this->Code.=' inline';
+        $this->Code.='"><input type="checkbox"';
+        $this->Code.=parent::parseAttribs($Attribs);
+        $this->Code.=' />'.$Label.'</label>';
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class Radio extends FormUtils   {
+    private $Code;
+
+    public function __construct($Label='', $Attribs=array(), $Inline=false){
+        $this->Code.='<label class="radio';
+        if ($Inline)
+            $this->Code.=' inline';
+        $this->Code.='"><input type="radio"';
+        $this->Code.=parent::parseAttribs($Attribs);
+        $this->Code.=' />'.$Label.'</label>';
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class Dropdown extends FormUtils    {
+    private $Code='';
+
+    public function __construct($Options=array(), $Selected=null, $Attribs=array()){
+        $this->Code.='<select';
+        $this->Code.=parent::parseAttribs($Attribs);
+        $this->Code.='>';
+
+        foreach($Options as $key=>$val){
+            $this->Code.='<option value="'.$key.'"';
+            if ($Selected==$key)
+                $this->Code.=' selected';
+            $this->Code.='>'.$val.'</option>';
+        }
+
+        $this->Code.='</select>';
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class Help  {
+    private $Code='';
+
+    public function __construct($Text){
+        $this->Code.='<p class="help-block">'.$Text.'</p>';
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class File extends FormUtils    {
+    private $Code='';
+
+    public function __construct($Attribs=array()){
+        $this->Code.='<input type="file"';
+        $this->Code.=parent::parseAttribs($Attribs);
+        $this->Code.=' />';
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class Button extends FormUtils  {
+    private $Code='';
+
+    public function __construct($Label='', $Attribs=array()){
+        $this->build($Label, $Attribs);
+    }
+
+    protected function build($Label='Button', $Attribs=array()){
+        $this->Code.='<button type="'.$Attribs['type'].'"';
+        $this->Code.=parent::parseAttribs($Attribs);
+        $this->Code.='>'.$Label.'</button>';
+    }
+
+    function render(){
+        return $this->Code;
+    }
+}
+
+class Submit extends Button {
+    public function __construct($Label='Submit',$Attribs=array('class'=>'btn btn-primary')){
+        $Attribs['type']="submit";
+        parent::build($Label, $Attribs);
+    }
+}
+
+class Reset extends Button  {
+    public function __construct($Label='Reset',$Attribs=array('class'=>'btn')){
+        $Attribs['type']="reset";
+        parent::build($Label, $Attribs);
+    }
+}
+
+class ButtonGroup extends FormUtils   {
+    private $Code='';
+
+    public function __construct(){
+        $this->Code.='<div class="btn-group">';
+        
+        $Inputs=func_get_args();
+        for($i=0, $Size=count($Inputs); $i<$Size; $i++){
+            $this->Code.=$Inputs[$i]->render();
+        }
+
+        $this->Code.='</div>';
+    }
+
+    public function render(){
+        echo $this->Code;
+    }
+}
+
+class BGButton extends FormUtils  {
+    private $Code='';
+
+    public function __construct($Icon='cog', $Attribs=array()){
+        $this->Code.='<a class="btn" href="javascript:void(0)"';
+        $this->Code.=parent::parseAttribs($Attribs);
+        $this->Code.='><i class="icon-'.$Icon.'"></i></a>';
+    }
+
+    public function render(){
+        return $this->Code;
+    }
+}
+
+class ButtonDropdown extends FormUtils  {
+    private $Code='';
+
+    public function __construct($Label='', $Dropdown=array()){
+        $this->Code.='<div class="btn-group"><a class="btn" href="javascript:void(0)"></a><a class="btn dropdown-toggle" href="javascript:void(0)"></a><ul class="dropdown-menu">';
+        foreach($Dropdown as $key=>$val){
+            //$this->Code.='<li><a href="javascript:void(0)" id="'..'"></a>';
+        }
+        $this->Code.='</ul></div>';
+    }
+
+    public function render(){
+        return $this->Code;
+    }
 }
 ?>
