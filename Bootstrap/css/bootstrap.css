@@ -1502,7 +1502,7 @@ table .span12 {
 .caret {
   display: inline-block;
   width: 0;
-  height: 0;
+  height: 7px;
   text-indent: -99999px;
   *text-indent: 0;
   vertical-align: top;

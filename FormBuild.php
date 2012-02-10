@@ -108,7 +108,7 @@ class Form extends FormUtils {
             $this->Code.='</fieldset>';
         $this->Code.='</form>';
 
-        echo $this->Code;
+        return $this->Code;
     }
 }
 
@@ -292,9 +292,13 @@ class ButtonDropdown extends FormUtils  {
     private $Code='';
 
     public function __construct($Label='', $Dropdown=array()){
-        $this->Code.='<div class="btn-group"><a class="btn" href="javascript:void(0)"></a><a class="btn dropdown-toggle" href="javascript:void(0)"></a><ul class="dropdown-menu">';
-        foreach($Dropdown as $key=>$val){
-            //$this->Code.='<li><a href="javascript:void(0)" id="'..'"></a>';
+        $this->Code.='<div class="btn-group"><a class="btn" href="javascript:void(0)">'.$Label.'</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><span class="caret"></span></a><ul class="dropdown-menu">';
+        foreach($Dropdown as $i){
+            $this->Code.='<li><a href="javascript:void(0)" id="'.$i[0].'">';
+            if ($i[1])
+                $this->Code.='<i class="icon-'.$i[1].'"></i>';
+            $this->Code.=$i[2];
+            $this->Code.='</a>';
         }
         $this->Code.='</ul></div>';
     }

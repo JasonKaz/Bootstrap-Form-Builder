@@ -1,6 +1,8 @@
 <html>
 <head>
     <link rel="stylesheet" href="Bootstrap/css/bootstrap.css" media="all">
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="Bootstrap/js/dropdown.js"></script>
     <style>
         .grouping input   {
             display: block;
@@ -84,6 +86,12 @@ echo $Form->init('test.php', 'post', array(
     )
     ->render();
 
+$BD=new ButtonDropdown('User',array(
+    array('id1','pencil','Edit'),
+    array('id2','headphones','Listen')
+));
+echo $BD->render();
+
 $BG=new ButtonGroup(
     new BGButton('signal', array(
         'id'=>'test'
@@ -92,6 +100,8 @@ $BG=new ButtonGroup(
 );
 
 echo $BG->render();
+
+
 ?>
     </div>
 </div>
