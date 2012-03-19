@@ -1,4 +1,8 @@
 <?php
+/*
+@author Jason Kaczmarsky
+*/
+
 class FormUtils {
     protected function parseAttribs($Attribs){
         $Code='';
