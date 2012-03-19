@@ -22,6 +22,7 @@ class FormUtils {
                 case 'required':
                     if ($val)
                         $Code.=' required="required"';
+                    break;
 
                 default:
                     $Code.=' '.$key.'="'.$val.'"';
