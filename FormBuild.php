@@ -4,6 +4,8 @@
 */
 
 class FormUtils {
+    protected $Attribs=array();
+
     protected function parseAttribs($Attribs){
         $Code='';
 
@@ -24,8 +26,14 @@ class FormUtils {
                         $Code.=' required="required"';
                     break;
 
+                case 'multiple':
+                    if ($val)
+                        $Code.=' multiple="multiple"';
+                    break;
+
                 default:
-                    $Code.=' '.$key.'="'.$val.'"';
+                    if ($key!='prepend' && $key!='append')
+                        $Code.=' '.$key.'="'.$val.'"';
             }
         }
 
@@ -33,24 +41,56 @@ class FormUtils {
     }
 
     protected function getPend1($Attribs){
-        if (isset($Attribs['prepend']))
-            return '<div class="input-prepend"><span class="add-on">'.$Attribs['prepend'].'</span>';
+        $Code='';
+        $Prepend=isset($Attribs['prepend'])?$Attribs['prepend']:null;
+        $Append=isset($Attribs['append'])?$Attribs['append']:null;
 
-        if (isset($Attribs['append']))
-            return '<div class="input-append">';
+        if ($Prepend || $Append){
+            $Code='<div class="';
+
+            if ($Prepend)
+                $Code.='input-prepend';
+
+            if ($Append){
+                if ($Prepend)
+                    $Code.=' ';
+
+                $Code.='input-append';
+            }
+
+            $Code.='">';
+
+            if ($Prepend){
+                if (is_string($Prepend))
+                    $Code.='<span class="add-on">'.$Prepend.'</span>';
+                else
+                    $Code.=$Prepend->render();
+            }
+        }
+
+        return $Code;
     }
 
     protected function getPend2($Attribs){
-        if (isset($Attribs['append']))
-            return '<span class="add-on">'.$Attribs['append'].'</span></div>';
+        if (isset($Attribs['append'])){
+            if (is_string($Attribs['append']))
+                return '<span class="add-on">'.$Attribs['append'].'</span></div>';
+            else
+                return ($Attribs['append']->render()).'</div>';
+        }
 
         if (isset($Attribs['prepend']))
             return '</div>';
+
     }
 
     protected function getHelpText($HelpText){
         if ($HelpText)
             return '<p class="help-block">'.$HelpText.'</p>';
+    }
+
+    protected function getAttrib($AttributeName){
+        return isset($this->Attribs[$AttributeName])?$this->Attribs[$AttributeName]:null;
     }
 }
 
@@ -78,14 +118,15 @@ class Form extends FormUtils {
         $Inputs=func_get_args();
         $Size=count($Inputs)-1;
 
-        if ($Label)
-            $this->Code.='<label class="control-label">'.$Label.'</label>';
-        $this->Code.='<div class="controls';
+        if ($Label){
+            $this->Code.='<label class="control-label"';
+            if ($Size==1 && $Inputs[1]->getAttrib('id')!=null)
+                $this->Code.=' for="'.$Inputs[1]->getAttrib('id').'"';
 
-        if ($Size>2)
-            $this->Code.=' grouping';
+            $this->Code.='>'.$Label.'</label>';
+        }
 
-        $this->Code.='">';
+        $this->Code.='<div class="controls">';
 
         for($i=1; $i<$Size+1; $i++)
             $this->Code.=$Inputs[$i]->render();
@@ -124,6 +165,8 @@ class Text extends FormUtils  {
         $this->Code.=parent::getPend1($Attribs);
         $this->Code.='<input type="text"'.parent::parseAttribs($Attribs).' />';
         $this->Code.=parent::getPend2($Attribs);
+
+        $this->Attribs=$Attribs;
     }
 
     function render(){
@@ -138,6 +181,8 @@ class Password extends FormUtils    {
         $this->Code.=parent::getPend1($Attribs);
         $this->Code.='<input type="password"'.parent::parseAttribs($Attribs).' />';
         $this->Code.=parent::getPend2($Attribs);
+
+        $this->Attribs=$Attribs;
     }
 
     function render(){
@@ -155,6 +200,8 @@ class Checkbox extends FormUtils    {
         $this->Code.='"><input type="checkbox"';
         $this->Code.=parent::parseAttribs($Attribs);
         $this->Code.=' />'.$Label.'</label>';
+
+        $this->Attribs=$Attribs;
     }
 
     function render(){
@@ -172,6 +219,8 @@ class Radio extends FormUtils   {
         $this->Code.='"><input type="radio"';
         $this->Code.=parent::parseAttribs($Attribs);
         $this->Code.=' />'.$Label.'</label>';
+
+        $this->Attribs=$Attribs;
     }
 
     function render(){
@@ -187,14 +236,21 @@ class Dropdown extends FormUtils    {
         $this->Code.=parent::parseAttribs($Attribs);
         $this->Code.='>';
 
+        //Convert $Selected to array if necessary
+        $Selected=(array)$Selected;
+
         foreach($Options as $key=>$val){
             $this->Code.='<option value="'.$key.'"';
-            if ($Selected==$key)
+
+            if (in_array($key, $Selected))
                 $this->Code.=' selected';
+
             $this->Code.='>'.$val.'</option>';
         }
 
         $this->Code.='</select>';
+
+        $this->Attribs=$Attribs;
     }
 
     function render(){
@@ -206,7 +262,7 @@ class Help  {
     private $Code='';
 
     public function __construct($Text){
-        $this->Code.='<p class="help-block">'.$Text.'</p>';
+        $this->Code.='<span class="help-block">'.$Text.'</span>';
     }
 
     function render(){
@@ -221,6 +277,8 @@ class File extends FormUtils    {
         $this->Code.='<input type="file"';
         $this->Code.=parent::parseAttribs($Attribs);
         $this->Code.=' />';
+
+        $this->Attribs=$Attribs;
     }
 
     function render(){
@@ -239,6 +297,8 @@ class Button extends FormUtils  {
         $this->Code.='<button type="'.$Attribs['type'].'"';
         $this->Code.=parent::parseAttribs($Attribs);
         $this->Code.='>'.$Label.'</button>';
+
+        $this->Attribs=$Attribs;
     }
 
     function render(){
@@ -265,7 +325,7 @@ class ButtonGroup extends FormUtils   {
 
     public function __construct(){
         $this->Code.='<div class="btn-group">';
-        
+
         $Inputs=func_get_args();
         for($i=0, $Size=count($Inputs); $i<$Size; $i++){
             $this->Code.=$Inputs[$i]->render();
