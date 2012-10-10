@@ -1,8 +1,8 @@
 <html>
 <head>
-    <link rel="stylesheet" href="Bootstrap/css/bootstrap.css" media="all">
+    <link rel="stylesheet" href="bootstrap 2.1.1/css/bootstrap.css" media="all">
     <script src="js/jquery-1.7.1.min.js"></script>
-    <script src="Bootstrap/js/dropdown.js"></script>
+    <script src="bootstrap 2.1.1/js/bootstrap.min.js"></script>
     <style>
         .grouping input   {
             display: block;
