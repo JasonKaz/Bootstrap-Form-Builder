@@ -3,9 +3,18 @@
 @author Jason Kaczmarsky
 */
 
+/**
+ * Some helper functions for forms and inputs
+ */
 class FormUtils {
     protected $Attribs=array();
 
+    /**
+     * Parses an associative array and returns proper HTML equivalent for tags
+     *
+     * @param array $Attribs
+     * @return string
+     */
     protected function parseAttribs($Attribs){
         $Code='';
 
@@ -40,6 +49,12 @@ class FormUtils {
         return $Code;
     }
 
+    /**
+     * Generates the proper Bootstrap prepend HTML if necessary
+     *
+     * @param array $Attribs
+     * @return string
+     */
     protected function getPend1($Attribs){
         $Code='';
         $Prepend=isset($Attribs['prepend'])?$Attribs['prepend']:null;
@@ -71,6 +86,12 @@ class FormUtils {
         return $Code;
     }
 
+    /**
+     * Generates the proper Bootstrap append HTML if necessary
+     *
+     * @param array $Attribs
+     * @return string
+     */
     protected function getPend2($Attribs){
         if (isset($Attribs['append'])){
             if (is_string($Attribs['append']))
@@ -84,27 +105,64 @@ class FormUtils {
 
     }
 
-    protected function getHelpText($HelpText){
-        if ($HelpText)
-            return '<p class="help-block">'.$HelpText.'</p>';
-    }
-
+    /**
+     * Gets a single attribute value by name
+     *
+     * @param string $AttributeName
+     * @return bool|null
+     */
     protected function getAttrib($AttributeName){
         return isset($this->Attribs[$AttributeName])?$this->Attribs[$AttributeName]:null;
     }
+
+    /**
+     * Checks if a class already exists within the "class" attribute
+     *
+     * @param string $Needle
+     * @return bool
+     */
+    protected function checkClassValue($Needle){
+        if (isset($this->Attribs['class']))
+            return in_array($Needle, explode(" ", $this->Attribs['class']));
+
+        return false;
+    }
 }
 
+/**
+ * Constructs the main form container and aggregates all generated HTML from the inputs
+ */
 class Form extends FormUtils {
-    private $Code='', $UseHead=false;
+    private $Code='', $UseHead=false, $UseControlGroups=true;
 
+    /**
+     * Generates the top HTML for the form
+     *
+     * @param string $Action Where the form will go once submitted
+     * @param string $Method How the form will be submitted
+     * @param array $Attribs HTML attributes
+     * @return Form
+     */
     public function init($Action='#', $Method='POST', $Attribs=array()){
+        $this->Attribs=$Attribs;
+
         $this->Code.='<form action="'.$Action.'" method="'.strtoupper($Method).'"';
         $this->Code.=parent::parseAttribs($Attribs);
         $this->Code.='>';
 
+        if (!$this->checkClassValue('form-horizontal'))
+            $this->UseControlGroups=false;
+
         return $this;
     }
 
+    /**
+     * Generates the form inputs within a fieldset and provides a title for the form
+     * OPTIONAL FOR ALL FORMS
+     *
+     * @param string $Title
+     * @return Form
+     */
     public function head($Title){
         $this->UseHead=true;
 
@@ -113,29 +171,50 @@ class Form extends FormUtils {
         return $this;
     }
 
+    /**
+     * Creates a grouping of inputs with a given $Label
+     * A group can contain any number of inputs
+     *
+     * @param string $Label
+     * @param object
+     * @return Form
+     */
     public function group($Label=''){
-        $this->Code.='<div class="control-group">';
+        if ($this->UseControlGroups)
+            $this->Code.='<div class="control-group">';
         $Inputs=func_get_args();
         $Size=count($Inputs)-1;
 
         if ($Label){
-            $this->Code.='<label class="control-label"';
+            $this->Code.='<label';
+            if ($this->UseControlGroups)
+                $this->Code.=' class="control-label"';
             if ($Size==1 && $Inputs[1]->getAttrib('id')!=null)
                 $this->Code.=' for="'.$Inputs[1]->getAttrib('id').'"';
 
             $this->Code.='>'.$Label.'</label>';
         }
-
-        $this->Code.='<div class="controls">';
+        if ($this->UseControlGroups)
+            $this->Code.='<div class="controls">';
 
         for($i=1; $i<$Size+1; $i++)
             $this->Code.=$Inputs[$i]->render();
 
-        $this->Code.='</div></div>';
+        if ($this->UseControlGroups)
+            $this->Code.='</div></div>';
+
+        $this->Code.="\n";
 
         return $this;
     }
 
+    /**
+     * Creates a form-actions element that contains the form actions
+     * The actions element can have any number of actions
+     *
+     * @param object
+     * @return Form
+     */
     public function actions(){
         $this->Code.='<div class="form-actions">';
 
@@ -149,15 +228,23 @@ class Form extends FormUtils {
         return $this;
     }
 
+    /**
+     * Ends the form, returning the generated HTML for it
+     *
+     * @return string
+     */
     public function render(){
         if ($this->UseHead)
             $this->Code.='</fieldset>';
-        $this->Code.='</form>';
+        $this->Code.='</form>'."\n";
 
         return $this->Code;
     }
 }
 
+/**
+ * Creates a text input
+ */
 class Text extends FormUtils  {
     private $Code='';
 
@@ -174,6 +261,9 @@ class Text extends FormUtils  {
     }
 }
 
+/**
+ * Creates a password input
+ */
 class Password extends FormUtils    {
     private $Code='';
 
@@ -190,9 +280,19 @@ class Password extends FormUtils    {
     }
 }
 
+/**
+ * Creates a checkbox input
+ */
 class Checkbox extends FormUtils    {
     private $Code='';
 
+    /**
+     * Initializes the checkbox
+     *
+     * @param string $Label Text associated with the checkbox
+     * @param array $Attribs
+     * @param bool $Inline If true, appears on the same line as other checkboxes in the group
+     */
     public function __construct($Label='', $Attribs=array(), $Inline=false){
         $this->Code.='<label class="checkbox';
         if ($Inline)
@@ -209,9 +309,19 @@ class Checkbox extends FormUtils    {
     }
 }
 
+/**
+ * Creates a radio input
+ */
 class Radio extends FormUtils   {
     private $Code;
 
+    /**
+     * Initializes a radio button
+     *
+     * @param string $Label Text associated with the button
+     * @param array $Attribs
+     * @param bool $Inline If true, appears on the same line as other radio buttons in the same group
+     */
     public function __construct($Label='', $Attribs=array(), $Inline=false){
         $this->Code.='<label class="radio';
         if ($Inline)
@@ -228,9 +338,19 @@ class Radio extends FormUtils   {
     }
 }
 
-class Dropdown extends FormUtils    {
+/**
+ * Creates a select input
+ */
+class Select extends FormUtils    {
     private $Code='';
 
+    /**
+     * Initializes the select
+     *
+     * @param array $Options Available options for the input
+     * @param null|array $Selected The default selected option. Can be a single option or an array of options. Options start with an index of 0
+     * @param array $Attribs
+     */
     public function __construct($Options=array(), $Selected=null, $Attribs=array()){
         $this->Code.='<select';
         $this->Code.=parent::parseAttribs($Attribs);
@@ -258,11 +378,20 @@ class Dropdown extends FormUtils    {
     }
 }
 
+/**
+ * Creates help text for an input
+ */
 class Help  {
     private $Code='';
 
-    public function __construct($Text){
-        $this->Code.='<span class="help-block">'.$Text.'</span>';
+    /**
+     * Generates help text
+     *
+     * @param string $Text
+     * @param bool $Block If true, help text appears on its own line
+     */
+    public function __construct($Text, $Block=true){
+        $this->Code.='<span class="help-'.(($Block)?'block':'inline').'">'.$Text.'</span>';
     }
 
     function render(){
@@ -270,6 +399,9 @@ class Help  {
     }
 }
 
+/**
+ * Creates a file input
+ */
 class File extends FormUtils    {
     private $Code='';
 
@@ -286,15 +418,24 @@ class File extends FormUtils    {
     }
 }
 
+/**
+ * Creates a general button
+ */
 class Button extends FormUtils  {
     private $Code='';
 
-    public function __construct($Label='', $Attribs=array()){
+    public function __construct($Label='Button', $Attribs=array('class'=>'btn', 'type'=>'submit')){
+        $this->Attribs=$Attribs;
+
+        //Add default classes that may have gotten overridden
+        if (!$this->checkClassValue('btn'))
+            $Attribs['class']='btn '.$Attribs['class'];
+
         $this->build($Label, $Attribs);
     }
 
-    protected function build($Label='Button', $Attribs=array()){
-        $this->Code.='<button type="'.$Attribs['type'].'"';
+    protected function build($Label, $Attribs){
+        $this->Code.='<button ';
         $this->Code.=parent::parseAttribs($Attribs);
         $this->Code.='>'.$Label.'</button>';
 
@@ -306,70 +447,49 @@ class Button extends FormUtils  {
     }
 }
 
-class Submit extends Button {
-    public function __construct($Label='Submit',$Attribs=array('class'=>'btn btn-primary')){
-        $Attribs['type']="submit";
-        parent::build($Label, $Attribs);
-    }
-}
-
-class Reset extends Button  {
-    public function __construct($Label='Reset',$Attribs=array('class'=>'btn')){
-        $Attribs['type']="reset";
-        parent::build($Label, $Attribs);
-    }
-}
-
-class ButtonGroup extends FormUtils   {
+/**
+ * Wrapper function for creating various input buttons
+ * Use other classes (Submit, Reset, etc) to create specific input buttons
+ */
+class InputButton extends FormUtils {
     private $Code='';
 
-    public function __construct(){
-        $this->Code.='<div class="btn-group">';
+    protected function build($Label='Button', $Attribs=array()){
+        $this->Attribs=$Attribs;
 
-        $Inputs=func_get_args();
-        for($i=0, $Size=count($Inputs); $i<$Size; $i++){
-            $this->Code.=$Inputs[$i]->render();
-        }
+        //Add default classes that may have gotten overridden
+        if (!$this->checkClassValue('btn'))
+            $Attribs['class']='btn '.$Attribs['class'];
 
-        $this->Code.='</div>';
-    }
-
-    public function render(){
-        echo $this->Code;
-    }
-}
-
-class BGButton extends FormUtils  {
-    private $Code='';
-
-    public function __construct($Icon='cog', $Attribs=array()){
-        $this->Code.='<a class="btn" href="javascript:void(0)"';
+        $this->Code.='<input value="'.$Label.'"';
         $this->Code.=parent::parseAttribs($Attribs);
-        $this->Code.='><i class="icon-'.$Icon.'"></i></a>';
+        $this->Code.=' />';
+
+        $this->Attribs=$Attribs;
     }
 
-    public function render(){
+    function render(){
         return $this->Code;
     }
 }
 
-class ButtonDropdown extends FormUtils  {
-    private $Code='';
-
-    public function __construct($Label='', $Dropdown=array()){
-        $this->Code.='<div class="btn-group"><a class="btn" href="javascript:void(0)">'.$Label.'</a><a class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><span class="caret"></span></a><ul class="dropdown-menu">';
-        foreach($Dropdown as $i){
-            $this->Code.='<li><a href="javascript:void(0)" id="'.$i[0].'">';
-            if ($i[1])
-                $this->Code.='<i class="icon-'.$i[1].'"></i>';
-            $this->Code.=$i[2];
-            $this->Code.='</a>';
-        }
-        $this->Code.='</ul></div>';
+/**
+ * Creates a submit input button
+ */
+class Submit extends InputButton {
+    public function __construct($Label='Submit',$Attribs=array('class'=>'btn')){
+        $Attribs['type']='submit';
+        parent::build($Label, $Attribs);
     }
+}
 
-    public function render(){
-        return $this->Code;
+/**
+ * Creates a reset input button
+ */
+class Reset extends InputButton  {
+    public function __construct($Label='Reset',$Attribs=array('class'=>'btn')){
+        $Attribs['type']='reset';
+        parent::build($Label, $Attribs);
     }
 }
 ?>

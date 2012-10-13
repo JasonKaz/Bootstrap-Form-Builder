@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="bootstrap 2.1.1/css/bootstrap.css" media="all">
+    <title>Bootstrap Form Builder Examples</title>
+    <link rel="stylesheet" href="bootstrap%202.1.1/css/bootstrap.css" media="all">
     <script src="js/jquery-1.7.1.min.js"></script>
-    <script src="bootstrap 2.1.1/js/bootstrap.min.js"></script>
+    <script src="bootstrap%202.1.1/js/bootstrap.min.js"></script>
     <style>
         .grouping input   {
             display: block;
@@ -19,23 +20,61 @@
             require_once 'FormBuild.php';
 
             $Form=new Form();
+            echo $Form->init('#','post',array(
+                'class'=>'well'
+            ))
+                ->head('Default Style')
+                ->group('Label Name',
+                    new Text(array('placeholder'=>'Type something...')),
+                    new Help('Example block-level help text here.'),
+                    new Checkbox('Check me out',array('checked'=>true)),
+                    new Submit()
+                )
+                ->render();
+
+            $Form=new Form();
+            echo $Form->init('#','post',array(
+                'class'=>'form-search well'
+            ))
+                ->head('Search Form')
+                ->group('',
+                    new Text(array('class'=>'input-medium search-query')),
+                    new Submit('Search')
+                )
+                ->render();
+
+            $Form=new Form();
+            echo $Form->init('#','post',array(
+                'class'=>'form-inline well'
+            ))
+                ->head('Inline Form')
+                ->group('',
+                    new Text(array('placeholder'=>'Email','class'=>'input-small')),
+                    new Password(array('placeholder'=>'Password','class'=>'input-small')),
+                    new Checkbox('Remember me'),
+                    new Submit('Sign In')
+            )
+                ->render();
+
+            $Form=new Form();
             echo $Form->init('#', 'post', array(
                 'class'=>'form-horizontal well'
             ))
-                ->head('Horizontal Form')
-                ->group('Email',
+            ->head('Horizontal Form')
+            ->group('Email',
                 new Text(array(
                     'placeholder'   => 'Email',
                     'id'            => 'inputEmail'
                 ))
             )
-                ->group('Password',
+            ->group('Password',
                 new Password(array(
                     'placeholder'   => 'Password',
                     'id'            => 'inputPassword'
-                ))
+                )),
+                new Help('test')
             )
-                ->group('',
+            ->group('',
                 new Checkbox('Remember me', array(
                     'checked'   => true
                 )),
@@ -43,31 +82,31 @@
                     'class' => 'btn'
                 ))
             )
-                ->group('Checkboxes',
+            ->group('Checkboxes',
                 new Checkbox('test'),
                 new Checkbox('test2')
             )
-                ->group('Radios',
+            ->group('Radios',
                 new Radio('test',array('name'=>'test')),
                 new Radio('test2',array('name'=>'test'))
             )
-                ->group('Inline Checkboxes',
+            ->group('Inline Checkboxes',
                 new Checkbox('test',array(),false),
                 new Checkbox('test2',array(),false)
             )
-                ->group('Select',
-                new Dropdown(array(
+            ->group('Select',
+                new Select(array(
                     1,2,3
                 ),1)
             )
-                ->group('Multiple Select',
-                new Dropdown(array(
+            ->group('Multiple Select',
+                new Select(array(
                     1,2,3
                 ),array(1,2),array(
                     'multiple'  => true
                 ))
             )
-                ->group('Prepended Input',
+            ->group('Prepended Input',
                 new Text(array(
                     'prepend'   => '@'
                 ))
@@ -77,29 +116,33 @@
                     'append'   => '$'
                 ))
             )
-                ->group('Combined prepend & append',
+            ->group('Combined prepend & append',
                 new Text(array(
                     'prepend'   => '@',
                     'append'    => '$'
                 ))
             )
-                ->group('Button Prepend',
+            ->group('Button Prepend',
                 new Text(array(
                     'prepend'   => new Button('Go!', array('type'=>'button','class'=>'btn'))
                 ))
             )
-                ->group('Button Append',
+            ->group('Button Append',
                 new Text(array(
-                    'append'   => new Button('Go!', array('type'=>'button','class'=>'btn'))
+                    'append'   => new Button('Go!', array('type'=>'submit', 'class'=>'1'))
                 ))
             )
-                ->group('Button append & prepend',
+            ->group('Button append & prepend',
                 new Text(array(
                     'prepend'   => new Button('Go!', array('type'=>'button','class'=>'btn')),
                     'append'   => new Button('Go2!', array('type'=>'button','class'=>'btn'))
                 ))
             )
-                ->render();
+            ->actions(
+                new Submit(),
+                new Reset()
+            )
+            ->render();
             ?>
         </div>
     </div>
