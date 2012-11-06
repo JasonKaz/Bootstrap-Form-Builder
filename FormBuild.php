@@ -362,7 +362,7 @@ class Select extends FormUtils    {
         foreach($Options as $key=>$val){
             $this->Code.='<option value="'.$key.'"';
 
-            if (in_array($key, $Selected))
+            if (in_array($key, $Selected, true))
                 $this->Code.=' selected';
 
             $this->Code.='>'.$val.'</option>';
