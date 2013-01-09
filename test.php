@@ -1,10 +1,25 @@
+<?php
+include 'env.inc.php';
+
+use JasonKaz\FormBuild\Form as Form;
+use JasonKaz\FormBuild\Text as Text;
+use JasonKaz\FormBuild\Help as Help;
+use JasonKaz\FormBuild\Checkbox as Checkbox;
+use JasonKaz\FormBuild\Submit as Submit;
+use JasonKaz\FormBuild\Password as Password;
+use JasonKaz\FormBuild\Select as Select;
+use JasonKaz\FormBuild\Radio as Radio;			
+use JasonKaz\FormBuild\Button as Button;		
+use JasonKaz\FormBuild\Reset as Reset;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Bootstrap Form Builder Examples</title>
-    <link rel="stylesheet" href="bootstrap%202.1.1/css/bootstrap.css" media="all">
-    <script src="js/jquery-1.7.1.min.js"></script>
-    <script src="bootstrap%202.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap-2.1.1/css/bootstrap.css" media="all">
+    <script src="jquery-1.7.1.min.js"></script>
+    <script src="bootstrap-2.1.1/js/bootstrap.min.js"></script>
     <style>
         .grouping input   {
             display: block;
@@ -17,8 +32,6 @@
     <div class="row">
         <div class="span12">
             <?php
-            require_once 'FormBuild.php';
-
             $Form=new Form();
             echo $Form->init('#','post',array(
                 'class'=>'well'
