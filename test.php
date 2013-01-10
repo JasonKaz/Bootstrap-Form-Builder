@@ -11,6 +11,7 @@ use JasonKaz\FormBuild\Select as Select;
 use JasonKaz\FormBuild\Radio as Radio;			
 use JasonKaz\FormBuild\Button as Button;		
 use JasonKaz\FormBuild\Reset as Reset;
+use JasonKaz\FormBuild\Custom as Custom;
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +19,6 @@ use JasonKaz\FormBuild\Reset as Reset;
 <head>
     <title>Bootstrap Form Builder Examples</title>
     <link rel="stylesheet" href="bootstrap-2.1.1/css/bootstrap.css" media="all">
-    <script src="jquery-1.7.1.min.js"></script>
     <script src="bootstrap-2.1.1/js/bootstrap.min.js"></script>
     <style>
         .grouping input   {
@@ -151,6 +151,9 @@ use JasonKaz\FormBuild\Reset as Reset;
                     'append'   => new Button('Go2!', array('type'=>'button','class'=>'btn'))
                 ))
             )
+			->group('Custom HTML',
+				new Custom('<b>Custom HTML</b>')
+			)
             ->actions(
                 new Submit(),
                 new Reset()
