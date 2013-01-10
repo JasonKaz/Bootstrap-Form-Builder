@@ -1,5 +1,5 @@
 {
-	"name"			: "JasonKaz/FormBuild",
+	"name"			: "jasonkaz/formbuild",
 	"version"		: "1.0.0",
 	"license"		: "MIT",
 	"description"	: "Twitter Bootstrap form creator for PHP",
