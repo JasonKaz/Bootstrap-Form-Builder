@@ -1,11 +1,14 @@
 <?php
+
 namespace JasonKaz\FormBuild;
 
 /**
  * Wrapper function for creating various input buttons
  * Use other classes (Submit, Reset, etc) to create specific input buttons
  */
-class InputButton extends FormInput {
+class InputButton extends FormUtils {
+    private $Code='';
+
     protected function build($Label='Button', $Attribs=array()){
         $this->Attribs=$Attribs;
 
@@ -15,9 +18,13 @@ class InputButton extends FormInput {
 
         $this->Code.='<input value="'.$Label.'"';
         $this->Code.=parent::parseAttribs($Attribs);
-        $this->Code.=' /> ';
+        $this->Code.=' />';
 
         $this->Attribs=$Attribs;
+    }
+
+    function render(){
+        return $this->Code;
     }
 }
 ?>

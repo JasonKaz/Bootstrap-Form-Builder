@@ -1,13 +1,10 @@
 <?php
-
 namespace JasonKaz\FormBuild;
 
 /**
  * Creates a select input
  */
-class Select extends FormUtils    {
-    private $Code='';
-
+class Select extends FormInput   {
     /**
      * Initializes the select
      *
@@ -35,10 +32,6 @@ class Select extends FormUtils    {
         $this->Code.='</select>';
 
         $this->Attribs=$Attribs;
-    }
-
-    function render(){
-        return $this->Code;
     }
 }
 ?>

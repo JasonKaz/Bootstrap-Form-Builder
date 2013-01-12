@@ -1,13 +1,10 @@
 <?php
-
 namespace JasonKaz\FormBuild;
 
 /**
  * Creates a way to insert any HTML into the form
  */
-class Custom extends FormUtils   {
-    private $Code;
-
+class Custom extends FormInput   {
     /**
      * Inserts the given code into the form
      *
@@ -15,10 +12,6 @@ class Custom extends FormUtils   {
      */
     public function __construct($Code=''){
         $this->Code=$Code;
-    }
-
-    function render(){
-        return $this->Code;
     }
 }
 ?>

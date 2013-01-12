@@ -5,9 +5,7 @@ namespace JasonKaz\FormBuild;
 /**
  * Creates a general button
  */
-class Button extends FormUtils  {
-    private $Code='';
-
+class Button extends FormInput  {
     public function __construct($Label='Button', $Attribs=array('class'=>'btn', 'type'=>'submit')){
         $this->Attribs=$Attribs;
 
@@ -24,10 +22,6 @@ class Button extends FormUtils  {
         $this->Code.='>'.$Label.'</button>';
 
         $this->Attribs=$Attribs;
-    }
-
-    function render(){
-        return $this->Code;
     }
 }
 ?>

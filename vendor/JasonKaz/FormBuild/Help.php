@@ -1,13 +1,10 @@
 <?php
-
 namespace JasonKaz\FormBuild;
 
 /**
  * Creates help text for an input
  */
-class Help  {
-    private $Code='';
-
+class Help extends FormInput  {
     /**
      * Generates help text
      *
@@ -16,10 +13,6 @@ class Help  {
      */
     public function __construct($Text, $Block=true){
         $this->Code.='<span class="help-'.(($Block)?'block':'inline').'">'.$Text.'</span>';
-    }
-
-    function render(){
-        return $this->Code;
     }
 }
 ?>

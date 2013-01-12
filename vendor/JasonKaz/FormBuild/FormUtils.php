@@ -1,5 +1,4 @@
 <?php
-
 namespace JasonKaz\FormBuild;
 
 
@@ -102,7 +101,6 @@ class FormUtils {
 
         if (isset($Attribs['prepend']))
             return '</div>';
-
     }
 
     /**

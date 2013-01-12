@@ -5,9 +5,7 @@ namespace JasonKaz\FormBuild;
 /**
  * Creates a radio input
  */
-class Radio extends FormUtils   {
-    private $Code;
-
+class Radio extends FormInput  {
     /**
      * Initializes a radio button
      *
@@ -24,10 +22,6 @@ class Radio extends FormUtils   {
         $this->Code.=' />'.$Label.'</label>';
 
         $this->Attribs=$Attribs;
-    }
-
-    function render(){
-        return $this->Code;
     }
 }
 ?>

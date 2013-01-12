@@ -1,10 +1,8 @@
 <?php
-
 namespace JasonKaz\FormBuild;
 
-//use \JasonKaz\FormBuild\FormUtils;
-class Form extends FormUtils {
-    private $Code='', $UseHead=false, $UseControlGroups=true;
+class Form extends FormInput{
+    private $UseHead=false, $UseControlGroups=true;
 
     /**
      * Generates the top HTML for the form
@@ -69,7 +67,7 @@ class Form extends FormUtils {
             $this->Code.='<div class="controls">';
 
         for($i=1; $i<$Size+1; $i++)
-            $this->Code.=$Inputs[$i]->render();
+            $this->Code.=$Inputs[$i]->render().' ';
 
         if ($this->UseControlGroups)
             $this->Code.='</div></div>';

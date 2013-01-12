@@ -1,13 +1,10 @@
 <?php
-
 namespace JasonKaz\FormBuild;
 
 /**
  * Creates a checkbox input
  */
-class Checkbox extends FormUtils    {
-    private $Code='';
-
+class Checkbox extends FormInput   {
     /**
      * Initializes the checkbox
      *
@@ -24,10 +21,6 @@ class Checkbox extends FormUtils    {
         $this->Code.=' />'.$Label.'</label>';
 
         $this->Attribs=$Attribs;
-    }
-
-    function render(){
-        return $this->Code;
     }
 }
 ?>
