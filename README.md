@@ -6,12 +6,15 @@ This project was created to allow PHP to create forms which applied to Twitter B
 To Do
 ------------------
 
-* Move hidden inputs from their own class to a Form class method to create the hidden inputs at the beginning of the form.
 * Do something with the Help class, it seems silly to have it in it's own class
-* Upgrade to Bootstrap 2.2.2
 
 Updates
 ------------------
+
+* 1.0.0 - 1/13/2013
+ * Updated to Twitter Bootstrap 2.2.2 - Still works with 2.1.1
+ * Modified examples slightly
+ * Created Form->hidden() function to handle hidden inputs within the form - Hidden object now deprecated
 
 * 1/12/2013
  * Fixed bug with inputs not having spacing between them if they were inline

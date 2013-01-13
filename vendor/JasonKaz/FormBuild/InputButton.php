@@ -6,6 +6,8 @@ namespace JasonKaz\FormBuild;
  * Use other classes (Submit, Reset, etc) to create specific input buttons
  */
 class InputButton extends FormInput {
+	private function __construct(){}
+	
     protected function build($Label='Button', $Attribs=array()){
         $this->Attribs=$Attribs;
 

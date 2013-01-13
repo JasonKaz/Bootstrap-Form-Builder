@@ -20,7 +20,7 @@ use JasonKaz\FormBuild\Hidden as Hidden;
 <html>
 <head>
     <title>Bootstrap Form Builder Examples</title>
-    <link rel="stylesheet" href="bootstrap-2.1.1/css/bootstrap.css" media="all">
+    <link rel="stylesheet" href="bootstrap-2.2.2/css/bootstrap.css" media="all">
     <link rel="stylesheet" href="prettify/prettify.css">
     <script src="prettify/prettify.js"></script>
     <style>
@@ -227,36 +227,40 @@ echo $Form->init('#', 'post', array(
     		<div class="bs-docs-example">
     		<?php
 			$Form=new Form;
-			echo $Form->init('#','post', array(
+			echo $Form->init('#', 'post', array(
 					'class'	=> 'form-horizontal'
 				))
 				->head('Supported Form Controls')
-				->group('Text',
-	                new Text()
-	            )
-	            ->group('Password',
-	                new Password()
-	            )
+				->hidden(array(
+					'name'	=> 'single-hidden',
+					'value'	=> 'single-hidden-value',
+					'id'	=> 'single-hidden-id'
+				))
+				->hidden(array(array(
+					'name'	=> 'multiple-hidden-1',
+					'value'	=> 'multiple-hidden-1-value'
+					), array(
+					'name'	=> 'multiple-hidden-2',
+					'value'	=> 'multiple-hidden-2-value'
+				)))
+				->group('Text', new Text())
+	            ->group('Password', new Password())
+				->group('Hidden', new Custom('Hiddens are handled by the Form->hidden() function'))
 				->group('Textarea', new Textarea('Default text'))
 	            ->group('Checkboxes',
-	                new Checkbox('test'),
-	                new Checkbox('test2')
+	                new Checkbox('Checkbox 1'),
+	                new Checkbox('Checkbox 2')
 	            )
 	            ->group('Radios',
-	                new Radio('test', array('name'=>'test')),
-	                new Radio('test2', array('name'=>'test'))
+	                new Radio('Radio 1'),
+	                new Radio('Radio 2')
 	            )
 	            ->group('Inline Checkboxes',
-	                new Checkbox('test', array(), true),
-	                new Checkbox('test2', array(), true)
+	                new Checkbox('Checkbox 1', array(
+						'checked'	=> true
+					), true),
+	                new Checkbox('Checkbox 2', array(), true)
 	            )
-				->group('Hidden Input', 
-					new Hidden(array(
-						'name'	=> 'hidden-input',
-						'value'	=> true
-					)),
-					new Custom('There really is a hidden input here!')
-				)
 	            ->group('Select',
 	                new Select(array(
 	                    1,2,3
@@ -265,7 +269,7 @@ echo $Form->init('#', 'post', array(
 	            ->group('Multiple Select',
 	                new Select(array(
 	                    1,2,3
-	                ),array(1,2),array(
+	                ),array(0,2),array(
 	                    'multiple'  => true
 	                ))
 	            )
@@ -315,45 +319,49 @@ echo $Form->init('#', 'post', array(
            </div>
            <pre class="prettyprint linenums">
 $Form=new Form;
-echo $Form->init('#','post', array(
+echo $Form->init('#', 'post', array(
 		'class'	=> 'form-horizontal'
 	))
 	->head('Supported Form Controls')
-	->group('Text',
-        new Text()
-    )
-    ->group('Password',
-        new Password()
-    )
-	->group('Textarea', new Textarea('Default text'))
+	->hidden(array(
+		'name'	=> 'single-hidden',
+		'value'	=> 'single-hidden-value',
+		'id'	=> 'single-hidden-id'
+	))
+	->hidden(array(array(
+		'name'	=> 'multiple-hidden-1',
+		'value'	=> 'multiple-hidden-1-value'
+		), array(
+		'name'	=> 'multiple-hidden-2',
+		'value'	=> 'multiple-hidden-2-value'
+	)))
+	->group('Text', new Text())
+    ->group('Password', new Password())
+    ->group('Hidden', new Custom('Hiddens are handled by the Form->hidden() function'))
+    ->group('Textarea', new Textarea('Default text'))
     ->group('Checkboxes',
-        new Checkbox('test'),
-        new Checkbox('test2')
+        new Checkbox('Checkbox 1'),
+        new Checkbox('Checkbox 2')
     )
     ->group('Radios',
-        new Radio('test', array('name'=>'test')),
-        new Radio('test2', array('name'=>'test'))
+        new Radio('Radio 1'),
+        new Radio('Radio 2')
     )
     ->group('Inline Checkboxes',
-        new Checkbox('test', array(), true),
-        new Checkbox('test2', array(), true)
+        new Checkbox('Checkbox 1', array(
+        	'checked'	=> true
+        ), true),
+        new Checkbox('Checkbox 2', array(), true)
     )
-	->group('Hidden Input', 
-		new Hidden(array(
-			'name'	=> 'hidden-input',
-			'value'	=> true
-		)),
-		new Custom('There really is a hidden input here!')
-	)
     ->group('Select',
         new Select(array(
             1,2,3
-        ),1)
+        ), 1)
     )
     ->group('Multiple Select',
         new Select(array(
             1,2,3
-        ),array(1,2),array(
+        ), array(0,2), array(
             'multiple'  => true
         ))
     )
@@ -362,7 +370,7 @@ echo $Form->init('#','post', array(
             'prepend'   => '@'
         ))
     )
-        ->group('Appended Input',
+    ->group('Appended Input',
         new Text(array(
             'append'   => '$'
         ))
@@ -385,17 +393,17 @@ echo $Form->init('#','post', array(
     )
     ->group('Button append & prepend',
         new Text(array(
-            'prepend'   => new Button('Go!', array('type'=>'button','class'=>'btn')),
-            'append'   => new Button('Go2!', array('type'=>'button','class'=>'btn'))
+            'prepend'	=> new Button('Go!', array('type'=>'button','class'=>'btn')),
+            'append'	=> new Button('Go2!', array('type'=>'button','class'=>'btn'))
         ))
     )
-	->group('Custom HTML',
-		new Custom('<img src="http://placehold.it/200x200" class="img-rounded" />')
-	)
+    ->group('Custom HTML',
+    	new Custom('Any HTML here')
+    )
     ->actions(
         new Submit('Submit', array(
-			'class'	=> 'btn-primary'
-		)),
+        	'class'	=> 'btn-primary'
+        )),
         new Reset()
     )
     ->render();</pre>

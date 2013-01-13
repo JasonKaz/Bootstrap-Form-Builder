@@ -7,9 +7,9 @@ class Form extends FormInput{
     /**
      * Generates the top HTML for the form
      *
-     * @param string $Action Where the form will go once submitted
-     * @param string $Method How the form will be submitted
-     * @param array $Attribs HTML attributes
+     * @param string	$Action 	Where the form will go once submitted
+     * @param string	$Method 	How the form will be submitted
+     * @param array 	$Attribs 	HTML attributes for the form
      * @return Form
      */
     public function init($Action='#', $Method='POST', $Attribs=array()){
@@ -29,7 +29,7 @@ class Form extends FormInput{
      * Generates the form inputs within a fieldset and provides a title for the form
      * OPTIONAL FOR ALL FORMS
      *
-     * @param string $Title
+     * @param string	$Title
      * @return Form
      */
     public function head($Title){
@@ -44,8 +44,8 @@ class Form extends FormInput{
      * Creates a grouping of inputs with a given $Label
      * A group can contain any number of inputs
      *
-     * @param string $Label
-     * @param object
+     * @param string			$Label	The text to label the group
+     * @param form input object			Can be any form input object within the FormBuild package
      * @return Form
      */
     public function group($Label=''){
@@ -81,7 +81,7 @@ class Form extends FormInput{
      * Creates a form-actions element that contains the form actions
      * The actions element can have any number of actions
      *
-     * @param object
+     * @param form input object		Can be any form input object within the FormBuild package, but should be some type of button
      * @return Form
      */
     public function actions(){
@@ -109,5 +109,25 @@ class Form extends FormInput{
 
         return $this->Code;
     }
+	
+	/**
+	 * Defines hidden inputs within the form
+	 * Can accept a single array to create one input or a multidimensional array to create many inputs
+	 * 
+	 * @param $Inputs	array	An array of arrays or an associative array that sets the inputs attributes
+	 * @return Form
+	 */
+	public function hidden($Inputs=array()){
+		foreach($Inputs as $i){
+			if (is_array($i)){
+				$this->Code.='<input type="hidden"'.parent::parseAttribs($i).' />';
+			}else{
+				$this->Code.='<input type="hidden"'.parent::parseAttribs($Inputs).' />';
+				break;
+			}
+		}
+
+		return $this;
+	}
 }
 ?>
