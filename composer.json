@@ -19,6 +19,5 @@
 	},
 	"suggest"		: {
 		"twitter/bootstrap"	: "2.2.2"
-	},
-	"target-dir"	: "JasonKaz/FormBuild"
+	}
 }
