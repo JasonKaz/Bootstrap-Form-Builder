@@ -3,7 +3,7 @@
 	"version"		: "1.0.0",
 	"license"		: "MIT",
 	"description"	: "Twitter Bootstrap form creator for PHP",
-	"homepage"		: "http://pendarenstudios.com/projects/bootstrap-form-builder/examples.php"
+	"homepage"		: "http://pendarenstudios.com/projects/bootstrap-form-builder/examples.php",
 	"keywords"		: ["form","twitter","bootstrap","css"],
 	"authors"		: [
 		{
