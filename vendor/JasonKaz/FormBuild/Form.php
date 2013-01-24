@@ -49,9 +49,19 @@ class Form extends FormInput{
      * @return Form
      */
     public function group($Label=''){
-        if ($this->UseControlGroups)
-            $this->Code.='<div class="control-group">';
         $Inputs=func_get_args();
+        if ($this->UseControlGroups)
+        {
+            $ValidationState = '';
+            foreach ($Inputs as $index=>$Input) if($index > 0 && is_string($Input))
+            {
+                $ValidationState = $Input;
+                unset($Inputs[$index]);
+            }
+            $this->Code.='<div class="control-group '.$ValidationState.'">';
+            // Reset index
+            $Inputs = array_values($Inputs);
+        }
         $Size=count($Inputs)-1;
 
         if ($Label){
