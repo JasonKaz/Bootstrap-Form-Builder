@@ -172,7 +172,7 @@ echo $Form->init('#','post',array(
 	                'class'=>'form-horizontal'
 	            ))
 	            ->head('Horizontal Form')
-	            ->group('Email',
+	            ->group('Email', 'warning',
 	                new Text(array(
 	                    'placeholder'   => 'Email',
 	                    'id'            => 'inputEmail'
