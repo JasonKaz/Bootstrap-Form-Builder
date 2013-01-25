@@ -49,28 +49,48 @@ class Form extends FormInput{
      * @return Form
      */
     public function group($Label=''){
-        if ($this->UseControlGroups)
-            $this->Code.='<div class="control-group">';
-        $Inputs=func_get_args();
-        $Size=count($Inputs)-1;
+        $Args=func_get_args();
+        $Start=1;
+		
+        if ($this->UseControlGroups){
+        	$this->Code.='<div class="control-group';
+			
+			//Check if a validation state has been given
+        	if (is_string($Args[1])){
+        		$Start=2; //Skip validation state when it comes to rendering the inputs
+        		$this->Code.=' '.$Args[1];
+        	}
+			
+			$this->Code.='">';
+        }
+		
+        $InputCount=count($Args)-$Start;
 
         if ($Label){
             $this->Code.='<label';
-            if ($this->UseControlGroups)
+			
+            if ($this->UseControlGroups){
                 $this->Code.=' class="control-label"';
-            if ($Size==1 && $Inputs[1]->getAttrib('id')!=null)
-                $this->Code.=' for="'.$Inputs[1]->getAttrib('id').'"';
+			}
+
+            if ($InputCount==1 && $Args[$Start]->getAttrib('id')!=null){
+                $this->Code.=' for="'.$Args[$Start]->getAttrib('id').'"';
+			}
 
             $this->Code.='>'.$Label.'</label>';
         }
-        if ($this->UseControlGroups)
+		
+        if ($this->UseControlGroups){
             $this->Code.='<div class="controls">';
+		}
 
-        for($i=1; $i<$Size+1; $i++)
-            $this->Code.=$Inputs[$i]->render().' ';
+        for($i=$Start, $len=$InputCount + $Start; $i<$len; $i++){
+            $this->Code.=$Args[$i]->render().' ';
+		}
 
-        if ($this->UseControlGroups)
+        if ($this->UseControlGroups){
             $this->Code.='</div></div>';
+		}
 
         $this->Code.="\n";
 
