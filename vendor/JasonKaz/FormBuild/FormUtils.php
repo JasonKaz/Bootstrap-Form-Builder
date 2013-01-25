@@ -21,7 +21,7 @@ class FormUtils {
             switch ($key){
                 case 'checked':
                     if ($val)
-                        $Code.=' checked="checked"';
+                        $Code.=' checked';
                     break;
 
                 case 'autocomplete':
@@ -31,13 +31,23 @@ class FormUtils {
 
                 case 'required':
                     if ($val)
-                        $Code.=' required="required"';
+                        $Code.=' required';
                     break;
 
                 case 'multiple':
                     if ($val)
-                        $Code.=' multiple="multiple"';
+                        $Code.=' multiple';
                     break;
+					
+				case 'readonly':
+					if ($val)
+						$Code.=' readonly';
+					break;
+					
+				case 'autofocus':
+					if ($val)
+						$Code.=' autofocus';
+					break;
 
                 default:
                     if ($key!='prepend' && $key!='append')

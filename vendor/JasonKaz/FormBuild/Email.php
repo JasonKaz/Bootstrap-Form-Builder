@@ -6,12 +6,9 @@ namespace JasonKaz\FormBuild;
  * HTML5 Input Type
  * @link http://www.w3schools.com/html/html5_form_input_types.asp
  */
-class Email extends FormInput {
+class Email extends GeneralInput {
     public function __construct($Attribs=array()){
-        $this->Code.=parent::getPend1($Attribs);
-        $this->Code.='<input type="email"'.parent::parseAttribs($Attribs).' />';
-        $this->Code.=parent::getPend2($Attribs);
-        $this->Attribs=$Attribs;
+    	parent::__construct('email', $Attribs);
     }
 }
 ?>

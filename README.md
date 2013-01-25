@@ -16,6 +16,12 @@ To Do
 Updates
 ------------------
 
+* 1.0.1 - 1/24/2013
+ * Added newlines to end of class files
+ * Added missing attributes (readonly, autofocus) to FormUtils
+ * Made attributes follow HTML5 standards
+ * Added wrapper class for general inputs to reduce code size in the future
+
 * 1.0.0 - 1/13/2013
  * Updated to Twitter Bootstrap 2.2.2 - Still works with 2.1.1
  * Modified examples slightly

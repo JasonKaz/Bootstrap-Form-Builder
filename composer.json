@@ -1,10 +1,10 @@
 {
 	"name"			: "jasonkaz/formbuild",
-	"version"		: "1.0.0",
+	"version"		: "1.0.1",
 	"license"		: "MIT",
 	"description"	: "Twitter Bootstrap form creator for PHP",
 	"homepage"		: "http://pendarenstudios.com/projects/bootstrap-form-builder/examples.php",
-	"keywords"		: ["form","twitter","bootstrap","css"],
+	"keywords"		: ["form","twitter","bootstrap","input"],
 	"authors"		: [
 		{
 			"name"		: "Jason Kaczmarsky",

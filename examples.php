@@ -14,6 +14,7 @@ use JasonKaz\FormBuild\Reset as Reset;
 use JasonKaz\FormBuild\Custom as Custom;
 use JasonKaz\FormBuild\Textarea as Textarea;
 use JasonKaz\FormBuild\Hidden as Hidden;
+use JasonKaz\FormBuild\Email as Email;
 ?>
 
 <!DOCTYPE html>
@@ -173,7 +174,7 @@ echo $Form->init('#','post',array(
 	            ))
 	            ->head('Horizontal Form')
 	            ->group('Email', 'warning',
-	                new Text(array(
+	                new Email(array(
 	                    'placeholder'   => 'Email',
 	                    'id'            => 'inputEmail'
 	                ))
@@ -243,7 +244,9 @@ echo $Form->init('#', 'post', array(
 					'name'	=> 'multiple-hidden-2',
 					'value'	=> 'multiple-hidden-2-value'
 				)))
-				->group('Text', new Text())
+				->group('Text', new Text(array(
+					'required'	=> true
+				)))
 	            ->group('Password', new Password())
 				->group('Hidden', new Custom('Hiddens are handled by the Form->hidden() function'))
 				->group('Textarea', new Textarea('Default text'))
