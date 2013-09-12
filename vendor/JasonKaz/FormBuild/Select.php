@@ -18,7 +18,8 @@ class Select extends FormInput   {
         $this->Code.='>';
 
         //Convert $Selected to array if necessary
-        $Selected=(array)$Selected;
+        if(!is_array($Selected))
+            $Selected=(array)$Selected;
 
         foreach($Options as $key=>$val){
             $this->Code.='<option value="'.$key.'"';
