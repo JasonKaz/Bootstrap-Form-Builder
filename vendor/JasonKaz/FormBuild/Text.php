@@ -1,16 +1,10 @@
 <?php
 namespace JasonKaz\FormBuild;
 
-/**
- * Creates a text input
- */
-class Text extends FormInput {
+class Text extends FormElement {
     public function __construct($Attribs=array()){
-        $this->Code.=parent::getPend1($Attribs);
-        $this->Code.='<input type="text"'.parent::parseAttribs($Attribs).' />';
-        $this->Code.=parent::getPend2($Attribs);
+        $Attribs=$this->setAttributeDefaults($Attribs, array('class'=>'form-control'));
 
-        $this->Attribs=$Attribs;
+        $this->Code='<input type="text"'.$this->parseAttribs($Attribs).' />';
     }
 }
-?>

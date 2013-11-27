@@ -15,9 +15,6 @@
 	],
 	"require"		: {
 		"php"				: ">=5.3.0",
-		"twitter/bootstrap"	: ">=2.1.1"
-	},
-	"suggest"		: {
-		"twitter/bootstrap"	: "2.2.2"
+		"twitter/bootstrap"	: ">=3"
 	}
 }
