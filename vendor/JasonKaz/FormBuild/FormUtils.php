@@ -2,7 +2,7 @@
 namespace JasonKaz\FormBuild;
 
 class FormUtils {
-    protected function setAttributeDefaults($SourceAttribs, $DefaultAttribs){
+   /*public static function setAttributeDefaults($SourceAttribs, $DefaultAttribs){
         foreach($DefaultAttribs as $k=>$v){
             if (!array_key_exists($k, $SourceAttribs)){
                 $SourceAttribs[$k]=$v;
@@ -12,7 +12,7 @@ class FormUtils {
         }
 
         return $SourceAttribs;
-    }
+    }*/
 
     protected function classExists($ClassString, $ClassToCheck){
         return in_array($ClassToCheck, explode(" ", $ClassString));

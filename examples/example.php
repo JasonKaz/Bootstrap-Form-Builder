@@ -15,10 +15,14 @@ include '../env.inc.php';
                 <?php
                 $Form=new \JasonKaz\FormBuild\Form();
                 $Form->init("#","POST",\JasonKaz\FormBuild\FormType::Horizontal);
+                $Form->setWidths(2, 10);
 
                 $Form->group($Form->label('User'), new \JasonKaz\FormBuild\Text(array('id'=>'test', 'class'=>'sd')));
-
-                $Form->group($Form->label('Pass'), new \JasonKaz\FormBuild\Text());
+                $Form->group($Form->label('Pass'), new \JasonKaz\FormBuild\Text(array('id'=>'hello')));
+                $Form->group(
+                    $Form->checkbox("Checkbox text", false),
+                    $Form->checkbox("More Text", false)
+                );
 
                 echo $Form->render();
                 ?>
