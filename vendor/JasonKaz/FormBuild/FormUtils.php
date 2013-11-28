@@ -1,36 +1,36 @@
 <?php
 namespace JasonKaz\FormBuild;
 
-class FormUtils {
-   /*public static function setAttributeDefaults($SourceAttribs, $DefaultAttribs){
-        foreach($DefaultAttribs as $k=>$v){
-            if (!array_key_exists($k, $SourceAttribs)){
-                $SourceAttribs[$k]=$v;
-            }else{
-                $SourceAttribs[$k].=' '.$v;
-            }
-        }
-
-        return $SourceAttribs;
-    }*/
-
-    protected function classExists($ClassString, $ClassToCheck){
+class FormUtils
+{
+    protected function classExists($ClassString, $ClassToCheck)
+    {
         return in_array($ClassToCheck, explode(" ", $ClassString));
     }
 
-    protected function addClass($ClassString, $ClassToAdd){
-        if (!self::classExists($ClassString, $ClassToAdd)){
-            return $ClassString.' '.$ClassToAdd;
+    protected function addClass($ClassString, $ClassToAdd)
+    {
+        if (!self::classExists($ClassString, $ClassToAdd)) {
+            return $ClassString . ' ' . $ClassToAdd;
         }
 
         return $ClassString;
     }
 
-    protected function parseAttribs($Attribs=array()){
-        $Str="";
+    protected function parseAttribs($Attribs = [])
+    {
+        $Str = "";
 
-        foreach ($Attribs as $key=>$val){
-            $Str.=' '.$key.'="'.$val.'"';
+        $Properties = ['disabled', 'readonly', 'multiple', 'checked', 'required', 'autofocus'];
+
+        foreach ($Attribs as $key => $val) {
+            if (in_array($key, $Properties)) {
+                if ($val === true) {
+                    $Str .= ' ' . strtolower($key);
+                }
+            } else {
+                $Str .= ' ' . $key . '="' . $val . '"';
+            }
         }
 
         return $Str;

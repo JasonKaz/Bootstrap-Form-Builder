@@ -6,31 +6,28 @@ namespace JasonKaz\FormBuild;
 
 class Checkbox extends FormElement
 {
-    private $Text, $FormType, $Inline, $LabelWidth;
-
     public function __construct($Text, $Inline, $Attribs = array(), $FormType, $LabelWidth)
     {
-        $this->Attribs    = $Attribs;
-        $this->Text       = $Text;
-        $this->FormType   = $FormType;
-        $this->Inline     = $Inline;
-        $this->LabelWidth = $LabelWidth;
-    }
+        $this->Attribs=$Attribs;
 
-    public function render()
-    {
-        $Code = '';
-
-        if ($this->FormType === FormType::Horizontal) {
-            $Code .= '<div class="col-sm-offset-' . $this->LabelWidth . ' col-sm-' . (12 - $this->LabelWidth) . '">';
+        if ($FormType === FormType::Horizontal) {
+            $this->Code .= '<div class="col-sm-offset-' . $LabelWidth . ' col-sm-' . (12 - $LabelWidth) . '">';
         }
 
-        $Code .= '<div class="checkbox"><label><input type="checkbox"' . $this->parseAttribs($this->Attribs) . ' /> ' . $this->Text . '</label></div> ';
-
-        if ($this->FormType === FormType::Horizontal) {
-            $Code .= '</div>';
+        if ($Inline===true){
+            $this->Code.='<label class="checkbox-inline"';
+        }else{
+            $this->Code.='<div class="checkbox"><label';
         }
 
-        return $Code;
+        $this->Code.='><input type="checkbox"' . $this->parseAttribs($this->Attribs) . ' /> ' . $Text.'</label>';
+
+        if ($Inline===false){
+            $this->Code.='</div> ';
+        }
+
+        if ($FormType === FormType::Horizontal) {
+            $this->Code .= '</div>';
+        }
     }
 }

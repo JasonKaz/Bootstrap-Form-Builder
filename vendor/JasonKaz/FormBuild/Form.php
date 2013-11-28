@@ -63,11 +63,7 @@ class Form extends FormElement
         $ArgCount = sizeof($Args);
         $Start    = 0;
 
-        if (get_class($Args[0]) === "JasonKaz\\FormBuild\\Checkbox") {
-            if ($this->FormType === FormType::Horizontal) {
-                $this->Code .= '<div class="form-group">';
-            }
-        } else {
+        if ((get_class($Args[0]) === "JasonKaz\\FormBuild\\Checkbox" && $this->FormType === FormType::Horizontal) || get_class($Args[0]) !== "JasonKaz\\FormBuild\\Checkbox") {
             $this->Code .= '<div class="form-group">';
         }
 
@@ -87,11 +83,8 @@ class Form extends FormElement
                 $this->Code .= '</div>';
             }
         }
-        if (get_class($Args[0]) === "JasonKaz\\FormBuild\\Checkbox") {
-            if ($this->FormType === FormType::Horizontal) {
-                $this->Code .= '</div> ';
-            }
-        } else {
+
+        if ((get_class($Args[0]) === "JasonKaz\\FormBuild\\Checkbox" && $this->FormType === FormType::Horizontal) || get_class($Args[0]) !== "JasonKaz\\FormBuild\\Checkbox") {
             $this->Code .= '</div> ';
         }
 
@@ -107,12 +100,19 @@ class Form extends FormElement
      *
      * @return Label
      */
-    public function label($Text, $Attribs = array(), $ScreenReaderOnly = false)
+    public function label($Text, $Attribs = [], $ScreenReaderOnly = false)
     {
         return new Label($Text, $Attribs, $ScreenReaderOnly, $this->FormType, $this->LabelWidth);
     }
 
-    public function checkbox($Text, $Inline, $Attribs = array())
+    /**
+     * @param       $Text
+     * @param       $Inline
+     * @param array $Attribs
+     *
+     * @return Checkbox
+     */
+    public function checkbox($Text, $Inline, $Attribs = [])
     {
         return new Checkbox($Text, $Inline, $Attribs, $this->FormType, $this->LabelWidth);
     }

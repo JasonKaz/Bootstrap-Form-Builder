@@ -12,26 +12,20 @@ class Label extends FormElement
      * @param        $FormType
      * @param        $LabelWidth
      */
-    public function __construct($Text, $Attribs = array(), $ScreenReaderOnly = false, $FormType, $LabelWidth)
+    public function __construct($Text, $Attribs = [], $ScreenReaderOnly = false, $FormType, $LabelWidth)
     {
         $this->Attribs          = $Attribs;
         $this->Text             = $Text;
         $this->ScreenReaderOnly = $ScreenReaderOnly;
 
         if ($FormType === FormType::Horizontal) {
-            $this->Attribs = $this->setAttributeDefaults(array('class' => 'control-label col-sm-' . $LabelWidth));
+            $this->Attribs = $this->setAttributeDefaults(['class' => 'control-label col-sm-' . $LabelWidth]);
         }
 
         if ($FormType === FormType::Inline && $ScreenReaderOnly === true) {
-            $this->Attribs = $this->setAttributeDefaults(array('class' => 'sr-only'));
+            $this->Attribs = $this->setAttributeDefaults(['class' => 'sr-only']);
         }
-    }
 
-    /**
-     * @return string
-     */
-    public function render()
-    {
-        return '<label ' . $this->parseAttribs($this->Attribs) . '>' . $this->Text . '</label>';
+        $this->Code='<label ' . $this->parseAttribs($this->Attribs) . '>' . $this->Text . '</label>';
     }
 }
