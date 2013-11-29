@@ -77,7 +77,11 @@ class Form extends FormElement
                 $this->Code .= '<div class="col-sm-' . $this->InputWidth . '">';
             }
 
-            $this->Code .= $Args[$i]->render();
+            if (gettype($Args[$i]) === "string") {
+                $this->Code .= '<p class="help-block">' . $Args[$i] . '</p>';
+            } else {
+                $this->Code .= $Args[$i]->render();
+            }
 
             if ($this->FormType == FormType::Horizontal && $i === $ArgCount - 1 && get_class($Args[$i]) !== "JasonKaz\\FormBuild\\Checkbox") {
                 $this->Code .= '</div>';
@@ -115,5 +119,27 @@ class Form extends FormElement
     public function checkbox($Text, $Inline, $Attribs = [])
     {
         return new Checkbox($Text, $Inline, $Attribs, $this->FormType, $this->LabelWidth);
+    }
+
+    /**
+     * Defines hidden inputs within the form
+     * Can accept a single array to create one input or a multidimensional array to create many inputs
+     *
+     * @param $Inputs        array        An array of arrays or an associative array that sets the inputs attributes
+     *
+     * @return Form
+     */
+    public function hidden($Inputs = [])
+    {
+        foreach ($Inputs as $i) {
+            if (is_array($i)) {
+                $this->Code .= '<input type="hidden"' . $this->parseAttribs($i) . ' />';
+            } else {
+                $this->Code .= '<input type="hidden"' . $this->parseAttribs($Inputs) . ' />';
+                break;
+            }
+        }
+
+        return $this;
     }
 }
