@@ -79,7 +79,7 @@ class Form extends FormElement
 
             if (gettype($Args[$i]) === "string") {
                 $this->Code .= '<p class="help-block">' . $Args[$i] . '</p>';
-            } else {
+            } elseif (is_object($Args[$i]) && method_exists($Args[$i], 'render')) {
                 $this->Code .= $Args[$i]->render();
             }
 
