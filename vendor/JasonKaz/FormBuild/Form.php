@@ -64,7 +64,11 @@ class Form extends FormElement
         $Start    = 0;
 
         if ((get_class($Args[0]) === "JasonKaz\\FormBuild\\Checkbox" && $this->FormType === FormType::Horizontal) || get_class($Args[0]) !== "JasonKaz\\FormBuild\\Checkbox") {
-            $this->Code .= '<div class="form-group">';
+            $group_class = array("form-group");
+            if (is_array($Args[$ArgCount - 1]) && isset($Args[$ArgCount - 1]['class'])) {
+                $group_class = array_merge($group_class, explode(' ', $Args[$ArgCount - 1]['class']));
+            }
+            $this->Code .= '<div class="' . implode(' ', $group_class) . '">';
         }
 
         //Add the "for" attribute for inputs if there is only 1 and it has an id
