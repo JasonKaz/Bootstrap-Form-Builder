@@ -83,7 +83,7 @@ class Form extends FormElement
                 $this->Code .= $Args[$i]->render();
             }
 
-            if ($this->FormType == FormType::Horizontal && $i === $ArgCount - 1 && get_class($Args[$i]) !== "JasonKaz\\FormBuild\\Checkbox") {
+            if ($this->FormType == FormType::Horizontal && $i === $ArgCount - 1 && get_class($Args[1]) !== "JasonKaz\\FormBuild\\Checkbox") {
                 $this->Code .= '</div>';
             }
         }
