@@ -1,7 +1,7 @@
 <?php
 namespace JasonKaz\FormBuild;
 
-class Checkbox extends FormElement
+class Radio extends FormElement
 {
     public function __construct($Text, $Inline, $Attribs = array(), $FormType, $LabelWidth)
     {
@@ -12,12 +12,12 @@ class Checkbox extends FormElement
         }
 
         if ($Inline === true) {
-            $this->Code .= '<label class="checkbox-inline"';
+            $this->Code .= '<label class="radio-inline"';
         } else {
-            $this->Code .= '<div class="checkbox"><label';
+            $this->Code .= '<div class="radio"><label';
         }
 
-        $this->Code .= '><input type="checkbox"' . $this->parseAttribs($this->Attribs) . ' /> ' . $Text . '</label>';
+        $this->Code .= '><input type="radio"' . $this->parseAttribs($this->Attribs) . ' /> ' . $Text . '</label>';
 
         if ($Inline === false) {
             $this->Code .= '</div> ';

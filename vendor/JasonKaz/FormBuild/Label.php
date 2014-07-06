@@ -25,7 +25,9 @@ class Label extends FormElement
         if ($FormType === FormType::Inline && $ScreenReaderOnly === true) {
             $this->Attribs = $this->setAttributeDefaults(['class' => 'sr-only']);
         }
+    }
 
-        $this->Code='<label ' . $this->parseAttribs($this->Attribs) . '>' . $this->Text . '</label>';
+    public function render(){
+        return '<label ' . $this->parseAttribs($this->Attribs) . '>' . $this->Text . '</label>';
     }
 }

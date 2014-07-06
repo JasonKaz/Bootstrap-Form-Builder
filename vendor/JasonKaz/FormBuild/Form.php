@@ -59,11 +59,14 @@ class Form extends FormElement
      */
     public function group()
     {
-        $Args     = func_get_args();
-        $ArgCount = sizeof($Args);
-        $Start    = 0;
+        $Args         = func_get_args();
+        $ArgCount     = sizeof($Args);
+        $Start        = 0;
+        $ArgClass     = get_class($Args[0]);
+        $DoFormGroup  = (($ArgClass === "JasonKaz\\FormBuild\\Checkbox" || $ArgClass === "JasonKaz\\FormBuild\\Radio") && $this->FormType === FormType::Horizontal) || $ArgClass !== "JasonKaz\\FormBuild\\Checkbox";
+        $DoInputWidth = false;
 
-        if ((get_class($Args[0]) === "JasonKaz\\FormBuild\\Checkbox" && $this->FormType === FormType::Horizontal) || get_class($Args[0]) !== "JasonKaz\\FormBuild\\Checkbox") {
+        if ($DoFormGroup) {
             $this->Code .= '<div class="form-group">';
         }
 
@@ -73,7 +76,10 @@ class Form extends FormElement
         }
 
         for ($i = $Start; $i < $ArgCount; $i++) {
-            if ($this->FormType == FormType::Horizontal && $i === 1 && get_class($Args[$i]) !== "JasonKaz\\FormBuild\\Checkbox") {
+            $ArgClass     = gettype($Args[$i]) !== "string" ? get_class($Args[$i]) : "";
+            $DoInputWidth = $this->FormType === FormType::Horizontal && $ArgClass !== "JasonKaz\\FormBuild\\Checkbox" && $ArgClass !== "JasonKaz\\FormBuild\\Radio";
+
+            if ($DoInputWidth && $i === 1) {
                 $this->Code .= '<div class="col-sm-' . $this->InputWidth . '">';
             }
 
@@ -83,12 +89,14 @@ class Form extends FormElement
                 $this->Code .= $Args[$i]->render();
             }
 
-            if ($this->FormType == FormType::Horizontal && $i === $ArgCount - 1 && get_class($Args[$i]) !== "JasonKaz\\FormBuild\\Checkbox") {
+            if ($DoInputWidth && $i === $ArgCount - 1) {
                 $this->Code .= '</div>';
             }
         }
 
-        if ((get_class($Args[0]) === "JasonKaz\\FormBuild\\Checkbox" && $this->FormType === FormType::Horizontal) || get_class($Args[0]) !== "JasonKaz\\FormBuild\\Checkbox") {
+        $ArgClass    = get_class($Args[0]);
+        $DoFormGroup = (($ArgClass === "JasonKaz\\FormBuild\\Checkbox" || $ArgClass === "JasonKaz\\FormBuild\\Radio") && $this->FormType === FormType::Horizontal) || $ArgClass !== "JasonKaz\\FormBuild\\Checkbox";
+        if ($DoFormGroup) {
             $this->Code .= '</div> ';
         }
 
@@ -119,6 +127,18 @@ class Form extends FormElement
     public function checkbox($Text, $Inline, $Attribs = [])
     {
         return new Checkbox($Text, $Inline, $Attribs, $this->FormType, $this->LabelWidth);
+    }
+
+    /**
+     * @param       $Text
+     * @param       $Inline
+     * @param array $Attribs
+     *
+     * @return Checkbox
+     */
+    public function radio($Text, $Inline, $Attribs = [])
+    {
+        return new radio($Text, $Inline, $Attribs, $this->FormType, $this->LabelWidth);
     }
 
     /**
