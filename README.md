@@ -3,11 +3,6 @@ Whats the purpose of this project?
 
 This project was created to allow PHP to create forms which applied to Twitter Bootstrap's standards without having to manually create a lot of markup.
 
-Examples
-------------------
-
-[Project Example Page](http://pendarenstudios.com/projects/bootstrap-form-builder/examples.php)
-
 To Do
 ------------------
 
